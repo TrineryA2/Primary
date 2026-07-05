@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Primary</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #faf8f5;
+    --surface: #ffffff;
+    --red: #e8786a;
+    --blue: #5c9df2;
+    --yellow: #f2d55c;
+    --green: #5cd67a;
+    --purple: #a78bfa;
+    --text: #3a3548;
+    --text-mid: #8a84a0;
+    --radius: 24px;
+    --shadow: 0 4px 0 rgba(0,0,0,0.06);
+  }
+
+  html, body {
+    height: 100%;
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
+    outline: none;
+  }
+
+  input, button, div, span {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-focus-ring-color: transparent;
+    outline: none;
+  }
+  button:focus, input:focus { outline: none; }
+
+  .screen {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+  .screen.hidden { opacity: 0; pointer-events: none; transform: scale(0.96); }
+
+  /* ── MENU ── */
+  #menu-screen { background: var(--bg); overflow: hidden; }
+
+  .floating-tiles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.5;
+  }
+  .tile {
+    position: absolute;
+    border-radius: 18px;
+    animation: floatAround 12s ease-in-out infinite;
+  }
+  .tile:nth-child(1) { width: 50px; height: 50px; background: var(--red); top: 15%; left: 10%; animation-delay: 0s; }
+  .tile:nth-child(2) { width: 35px; height: 35px; background: var(--blue); top: 25%; right: 15%; animation-delay: -3s; }
+  .tile:nth-child(3) { width: 45px; height: 45px; background: var(--yellow); bottom: 30%; left: 20%; animation-delay: -6s; }
+  .tile:nth-child(4) { width: 30px; height: 30px; background: var(--green); top: 10%; right: 30%; animation-delay: -9s; }
+  .tile:nth-child(5) { width: 55px; height: 55px; background: var(--purple); bottom: 15%; right: 10%; animation-delay: -4s; }
+  .tile:nth-child(6) { width: 25px; height: 25px; background: var(--red); top: 50%; left: 5%; animation-delay: -7s; opacity: 0.5; }
+  .tile:nth-child(7) { width: 40px; height: 40px; background: var(--blue); bottom: 40%; left: 40%; animation-delay: -2s; opacity: 0.7; }
+  .tile:nth-child(8) { width: 28px; height: 28px; background: var(--yellow); top: 35%; right: 8%; animation-delay: -8s; }
+
+  @keyframes floatAround {
+    0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+    25% { transform: translate(15px, -20px) rotate(90deg) scale(1.1); }
+    50% { transform: translate(-10px, -35px) rotate(180deg) scale(0.9); }
+    75% { transform: translate(-20px, -5px) rotate(270deg) scale(1.05); }
+  }
+
+  .logo-wrap { text-align: center; margin-bottom: 28px; position: relative; z-index: 1; }
+  .logo-icon {
+    width: 80px; height: 80px; margin: 0 auto 16px;
+    background: var(--surface); border-radius: 28px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: var(--shadow); position: relative;
+  }
+  .logo-icon svg { width: 40px; height: 40px; position: relative; z-index: 2; }
+  .logo-icon::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 32px;
+    background: conic-gradient(var(--red), var(--yellow), var(--green), var(--blue), var(--purple), var(--red));
+    opacity: 0.3;
+    animation: spin 6s linear infinite;
+    z-index: 0;
+  }
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+  .logo { font-size: 48px; font-weight: 900; letter-spacing: -0.03em; line-height: 1.1; color: var(--text); }
+  .logo span { color: var(--red); }
+  .logo-sub { font-size: 14px; font-weight: 700; color: var(--text-mid); margin-top: 8px; }
+
+  .menu-btn {
+    background: var(--surface); color: var(--text);
+    font-family: 'Nunito', sans-serif; font-size: 18px; font-weight: 800;
+    letter-spacing: -0.02em; border: none; border-radius: 30px;
+    padding: 16px 56px; cursor: pointer;
+    box-shadow: var(--shadow); transition: transform 0.1s, box-shadow 0.1s;
+    margin-bottom: 16px; position: relative; z-index: 1;
+    animation: gentleBounce 2s ease-in-out infinite;
+    -webkit-tap-highlight-color: transparent;
+  }
+  @keyframes gentleBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+  .menu-btn:active { transform: translateY(2px) !important; box-shadow: 0 2px 0 rgba(0,0,0,0.06); animation: none; }
+
+  .best-score-label { font-size: 11px; font-weight: 700; color: var(--text-mid); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 8px; position: relative; z-index: 1; }
+  .best-score-val { font-size: 22px; font-weight: 900; color: var(--blue); position: relative; z-index: 1; }
+
+  /* ── GAME SCREEN ── */
+  #game-screen { background: var(--bg); justify-content: flex-start; padding-top: 36px; gap: 16px; }
+  .game-header { width: 100%; max-width: 340px; display: flex; justify-content: space-between; align-items: center; }
+  .game-title { font-size: 18px; font-weight: 900; letter-spacing: -0.02em; color: var(--text); }
+  .score-chip { background: var(--surface); border-radius: 20px; padding: 6px 14px; font-size: 13px; font-weight: 800; color: var(--blue); box-shadow: var(--shadow); }
+
+  .card-stage { width: 100%; max-width: 340px; perspective: 800px; }
+  .color-card { width: 100%; height: 180px; border-radius: 28px; position: relative; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); cursor: default; }
+  .color-card.flipped { transform: rotateY(180deg); }
+  .card-face { position: absolute; inset: 0; border-radius: 28px; backface-visibility: hidden; -webkit-backface-visibility: hidden; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); }
+  .card-back { background: var(--surface); transform: rotateY(180deg); }
+  .card-back-content { text-align: center; }
+  .card-back-icon { margin-bottom: 4px; }
+  .card-back-icon svg { width: 36px; height: 36px; color: var(--text-mid); }
+  .card-back-label { font-size: 13px; font-weight: 800; color: var(--text-mid); letter-spacing: 0.02em; }
+  .card-back-cta { font-size: 16px; font-weight: 900; color: var(--text); }
+
+  .timer-row { width: 100%; max-width: 340px; display: flex; align-items: center; gap: 10px; }
+  .timer-bar-wrap { flex: 1; height: 6px; background: #ece9e3; border-radius: 999px; overflow: hidden; }
+  .timer-bar { height: 100%; border-radius: 999px; background: var(--yellow); transition: width 0.1s linear; width: 100%; }
+  .skip-btn { background: var(--surface); border: none; color: var(--text-mid); font-family: 'Nunito', sans-serif; font-size: 11px; font-weight: 800; padding: 6px 14px; border-radius: 20px; cursor: pointer; box-shadow: var(--shadow); transition: all 0.15s; flex-shrink: 0; -webkit-tap-highlight-color: transparent; }
+  .skip-btn:active { transform: translateY(1px); box-shadow: 0 2px 0 rgba(0,0,0,0.04); }
+  .phase-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-mid); text-align: center; }
+
+  .picker-card { width: 100%; max-width: 340px; background: var(--surface); border-radius: 28px; padding: 18px; box-shadow: var(--shadow); opacity: 0; transform: translateY(12px); transition: opacity 0.4s ease 0.1s, transform 0.4s ease 0.1s; }
+  .picker-card.visible { opacity: 1; transform: translateY(0); }
+  .picker-row { display: flex; gap: 10px; margin-bottom: 14px; }
+  .color-preview-box { width: 56px; height: 56px; border-radius: 18px; flex-shrink: 0; background: #e8e4de; transition: background 0.15s; }
+  .sliders { flex: 1; display: flex; flex-direction: column; gap: 8px; justify-content: center; }
+  .slider-row { display: flex; align-items: center; gap: 8px; }
+  .slider-label { font-size: 10px; font-weight: 900; width: 12px; color: var(--text); letter-spacing: 0.05em; }
+  .slider-label.r { color: var(--red); }
+  .slider-label.g { color: var(--green); }
+  .slider-label.b { color: var(--blue); }
+  input[type=range] { -webkit-appearance: none; flex: 1; height: 6px; border-radius: 999px; outline: none; cursor: pointer; }
+  input[type=range].r-range { background: linear-gradient(to right, #e8e4de, var(--red)); }
+  input[type=range].g-range { background: linear-gradient(to right, #e8e4de, var(--green)); }
+  input[type=range].b-range { background: linear-gradient(to right, #e8e4de, var(--blue)); }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.15); border: 2px solid #e8e4de; }
+  .hex-display { font-size: 11px; font-weight: 700; color: var(--text-mid); text-align: right; font-variant-numeric: tabular-nums; letter-spacing: 0.05em; }
+  .finish-btn { width: 100%; background: var(--blue); color: #fff; font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 800; letter-spacing: -0.02em; border: none; border-radius: 24px; padding: 12px; cursor: pointer; box-shadow: 0 4px 0 #4890d8; transition: transform 0.1s, box-shadow 0.1s; -webkit-tap-highlight-color: transparent; }
+  .finish-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #4890d8; }
+
+  /* ── RESULT SCREEN ── */
+  #result-screen { background: var(--bg); gap: 16px; }
+  .result-cards { display: flex; gap: 12px; width: 100%; max-width: 340px; }
+  .result-swatch { flex: 1; border-radius: 28px; height: 120px; display: flex; flex-direction: column; justify-content: flex-end; padding: 12px; box-shadow: var(--shadow); overflow: hidden; }
+  .result-swatch-label { font-size: 10px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.65); margin-bottom: 2px; }
+  .result-swatch-hex { font-size: 13px; font-weight: 900; color: #fff; letter-spacing: 0.04em; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+  .accuracy-card { width: 100%; max-width: 340px; background: var(--surface); border-radius: 28px; padding: 20px; text-align: center; box-shadow: var(--shadow); }
+  .accuracy-label { font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-mid); margin-bottom: 4px; }
+  .accuracy-number { font-size: 60px; font-weight: 900; letter-spacing: -0.04em; line-height: 1; margin-bottom: 4px; transition: color 0.3s; }
+  .accuracy-tag { font-size: 14px; font-weight: 800; letter-spacing: 0.02em; margin-bottom: 16px; }
+  .result-actions { display: flex; gap: 8px; width: 100%; max-width: 340px; }
+  .btn-secondary { flex: 1; background: var(--surface); color: var(--text); font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 800; border: none; border-radius: 24px; padding: 12px; cursor: pointer; box-shadow: var(--shadow); transition: transform 0.1s, box-shadow 0.1s; -webkit-tap-highlight-color: transparent; }
+  .btn-secondary:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0,0,0,0.04); }
+  .btn-primary { flex: 2; background: var(--text); color: #fff; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 800; border: none; border-radius: 24px; padding: 12px; cursor: pointer; box-shadow: 0 4px 0 rgba(0,0,0,0.15); transition: transform 0.1s, box-shadow 0.1s; -webkit-tap-highlight-color: transparent; }
+  .btn-primary:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0,0,0,0.1); }
+  .round-badge { background: var(--surface); border-radius: 999px; padding: 5px 14px; font-size: 11px; font-weight: 800; color: var(--text-mid); letter-spacing: 0.06em; text-transform: uppercase; box-shadow: var(--shadow); }
+
+  @media (max-height: 650px) {
+    #game-screen { padding-top: 16px; gap: 10px; }
+    .color-card { height: 130px; }
+    .picker-card { padding: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- MENU -->
+<div class="screen" id="menu-screen">
+  <div class="floating-tiles">
+    <div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div>
+    <div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div>
+  </div>
+
+  <div class="logo-wrap">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 0 0 20"/><path d="M2 12h20"/><path d="M12 2a15 15 0 0 1 0 20"/><path d="M12 2a15 15 0 0 0 0 20"/></svg>
+    </div>
+    <div class="logo">Prim<span>ary</span></div>
+    <div class="logo-sub">How sharp is your colour memory?</div>
+  </div>
+
+  <button class="menu-btn" onclick="startGame()">Play</button>
+
+  <div style="text-align:center; margin-top:8px;">
+    <div class="best-score-label">Best Score</div>
+    <div class="best-score-val" id="menu-best">—</div>
+  </div>
+</div>
+
+<!-- GAME -->
+<div class="screen hidden" id="game-screen">
+  <div class="game-header"><div class="game-title">Primary</div><div class="score-chip">Score: <span id="score-display">0</span></div></div>
+  <div class="round-badge" id="round-badge">Round 1</div>
+  <div class="card-stage"><div class="color-card" id="color-card"><div class="card-face card-front" id="card-front"></div><div class="card-face card-back"><div class="card-back-content"><div class="card-back-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div><div class="card-back-label">Memorised?</div><div class="card-back-cta">Now recreate it</div></div></div></div></div>
+  <div class="timer-row"><div class="timer-bar-wrap"><div class="timer-bar" id="timer-bar"></div></div><button class="skip-btn" id="skip-btn" onclick="skipMemorize()">Skip</button></div>
+  <div class="phase-label" id="phase-label">Memorise the colour</div>
+  <div class="picker-card" id="picker-card"><div class="picker-row"><div class="color-preview-box" id="preview-box"></div><div class="sliders"><div class="slider-row"><span class="slider-label r">R</span><input type="range" class="r-range" id="r-slider" min="0" max="255" value="128" oninput="updatePicker()"></div><div class="slider-row"><span class="slider-label g">G</span><input type="range" class="g-range" id="g-slider" min="0" max="255" value="128" oninput="updatePicker()"></div><div class="slider-row"><span class="slider-label b">B</span><input type="range" class="b-range" id="b-slider" min="0" max="255" value="128" oninput="updatePicker()"></div></div></div><div class="hex-display" id="hex-display">#808080</div><button class="finish-btn" id="finish-btn" onclick="finishRound()">Finish</button></div>
+</div>
+
+<!-- RESULT -->
+<div class="screen hidden" id="result-screen">
+  <div class="round-badge" id="result-round-badge">Round 1 Result</div>
+  <div class="result-cards"><div class="result-swatch" id="target-swatch"><div class="result-swatch-label">Target</div><div class="result-swatch-hex" id="target-hex-display"></div></div><div class="result-swatch" id="guess-swatch"><div class="result-swatch-label">Your Guess</div><div class="result-swatch-hex" id="guess-hex-display"></div></div></div>
+  <div class="accuracy-card"><div class="accuracy-label">Accuracy</div><div class="accuracy-number" id="accuracy-num">0%</div><div class="accuracy-tag" id="accuracy-tag">—</div></div>
+  <div class="result-actions"><button class="btn-secondary" onclick="goMenu()">Menu</button><button class="btn-primary" id="next-btn" onclick="nextRound()">Next Round</button></div>
+</div>
+
+<script>
+let targetColor={r:0,g:0,b:0},currentScore=0,currentRound=0,bestScore=parseInt(localStorage.getItem('primary_best_v6')||'0'),timerInterval=null,memorisePhase=!0;
+const MEMORISE_TIME=5000;
+function updateBestDisplay(){document.getElementById('menu-best').textContent=bestScore>0?bestScore:'—'}
+updateBestDisplay();
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden')),document.getElementById(id).classList.remove('hidden')}
+function goMenu(){clearTimer(),updateBestDisplay(),showScreen('menu-screen')}
+function startGame(){currentScore=0,currentRound=0,document.getElementById('score-display').textContent='0',showScreen('game-screen'),newRound()}
+function newRound(){currentRound++,document.getElementById('round-badge').textContent=`Round ${currentRound}`,targetColor=randomVividColor();let e=document.getElementById('color-card');e.classList.remove('flipped'),document.getElementById('card-front').style.background=rgbStr(targetColor),document.getElementById('r-slider').value=128,document.getElementById('g-slider').value=128,document.getElementById('b-slider').value=128,updatePicker();let t=document.getElementById('picker-card');t.classList.remove('visible'),document.getElementById('finish-btn').style.display='none',document.getElementById('skip-btn').style.display='inline-block',document.getElementById('timer-bar').style.background='var(--yellow)',document.getElementById('timer-bar').style.width='100%',document.getElementById('phase-label').textContent='Memorise the colour',memorisePhase=!0,startTimer()}
+function skipMemorize(){clearTimer(),flipCard()}
+function randomVividColor(){let e=360*Math.random(),t=55+45*Math.random(),r=35+35*Math.random();return hslToRgb(e,t,r)}
+function hslToRgb(e,t,r){t/=100,r/=100;let n=e=>((e+e/30)%12),a=t*Math.min(r,1-r),o=e=>r-a*Math.max(-1,Math.min(n(e)-3,Math.min(9-n(e),1)));return{r:Math.round(o(0)*255),g:Math.round(o(8)*255),b:Math.round(o(4)*255)}}
+function startTimer(){clearTimer();let e=document.getElementById('timer-bar'),t=Date.now();timerInterval=setInterval(()=>{let r=Date.now()-t,n=Math.max(0,1-r/MEMORISE_TIME);e.style.width=100*n+'%',n<.3?e.style.background='var(--red)':n<.6?e.style.background='#f2a55c':e.style.background='var(--yellow)',r>=MEMORISE_TIME&&(clearTimer(),flipCard())},50)}
+function clearTimer(){timerInterval&&(clearInterval(timerInterval),timerInterval=null)}
+function flipCard(){memorisePhase=!1,document.getElementById('skip-btn').style.display='none',document.getElementById('color-card').classList.add('flipped'),document.getElementById('phase-label').textContent='Recreate the colour',setTimeout(()=>{document.getElementById('picker-card').classList.add('visible'),document.getElementById('finish-btn').style.display='block'},300)}
+function updatePicker(){let e=parseInt(document.getElementById('r-slider').value),t=parseInt(document.getElementById('g-slider').value),r=parseInt(document.getElementById('b-slider').value);document.getElementById('preview-box').style.background=`rgb(${e},${t},${r})`,document.getElementById('hex-display').textContent=toHex(e,t,r)}
+function toHex(e,t,r){return'#'+[e,t,r].map(e=>e.toString(16).padStart(2,'0').toUpperCase()).join('')}
+function rgbStr(e){return`rgb(${e.r},${e.g},${e.b})`}
+function finishRound(){if(memorisePhase)return;let e=parseInt(document.getElementById('r-slider').value),t=parseInt(document.getElementById('g-slider').value),r=parseInt(document.getElementById('b-slider').value),n={r:e,g:t,b:r},a=calcAccuracy(targetColor,n),o=Math.round(a);currentScore+=o,document.getElementById('score-display').textContent=currentScore,currentScore>bestScore&&(bestScore=currentScore,localStorage.setItem('primary_best_v6',bestScore)),showResult(targetColor,n,a)}
+function calcAccuracy(e,t){let r=e.r-t.r,n=e.g-t.g,a=e.b-t.b;return Math.max(0,(1-Math.sqrt(r*r+n*n+a*a)/Math.sqrt(195075))*100)}
+function showResult(e,t,r){document.getElementById('result-round-badge').textContent=`Round ${currentRound} Result`,document.getElementById('target-swatch').style.background=rgbStr(e),document.getElementById('target-hex-display').textContent=toHex(e.r,e.g,e.b),document.getElementById('guess-swatch').style.background=rgbStr(t),document.getElementById('guess-hex-display').textContent=toHex(t.r,t.g,t.b);let n=document.getElementById('accuracy-num'),a=document.getElementById('accuracy-tag'),o=0,d=Math.round(r),l=Math.max(1,Math.floor(d/40)),i=setInterval(()=>{o=Math.min(o+l,d),n.textContent=o+'%',o>=d&&clearInterval(i)},20);r>=95?(n.style.color='var(--green)',a.textContent='Perfect Eye!',a.style.color='var(--green)'):r>=85?(n.style.color='var(--yellow)',a.textContent='Brilliant!',a.style.color='#c9a830'):r>=70?(n.style.color='#f2a55c',a.textContent='Not Bad!',a.style.color='#f2a55c'):r>=50?(n.style.color='var(--red)',a.textContent='Keep Trying',a.style.color='var(--red)'):(n.style.color='var(--blue)',a.textContent='Colour Blind?',a.style.color='var(--blue)'),showScreen('result-screen')}
+function nextRound(){showScreen('game-screen'),newRound()}
+</script>
+</body>
+</html>
